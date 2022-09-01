@@ -1,0 +1,82 @@
+.sp-track-input-form {
+    width: 100% !important;
+
+}
+
+.sp-track-input-form button {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.sp-track-input-form button, .sp-remove-track {
+    padding: 0 8px !important;
+    border: 1px solid #2271b1 !important;
+    height: 26px !important;
+    border-radius: 4px;
+}
+
+.sp-track-input-form .sp-clear-playlist, .sp-remove-track {
+    color: #d63638 !important;
+}
+
+#sp-track-container {
+    margin: 10px 0 !important;
+}
+
+#sp-track-container fieldset {
+    margin: 5px 0 !important;
+    border: 1px solid #d4d3d3;
+    border-radius: 4px;
+}
+
+#sp-track-container fieldset input {
+    display: block !important;
+    height: 35px !important;
+    width: 100%;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.sp-toggle {
+    height: 24px;
+    background: #d4d3d3;
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sp-toggle span {
+    margin-left: auto;
+}
+
+.sp-toggle span:target {
+    transform: rotate(180deg);
+}
+
+.sp-toggle h4 {
+    font-size: 16px;
+}
+
+.sp-toggle-target {
+    margin: 0 10px;
+}
+
+.sp-input-music-upload-container {
+    position: relative;
+}
+
+.sp-input-music-upload-container button {
+    position: absolute;
+    height: 40px;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+}
+
+.sp-remove-track {
+    cursor: pointer;
+}
