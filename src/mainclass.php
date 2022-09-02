@@ -87,7 +87,7 @@ class SimplePlaylist
         $tracks = get_post_meta($post->ID, 'sp-tracks');
         if ($tracks) {
 ?><div class='sp-track-input-form'>
-    <p>Note: Song URL fields are required</p>
+                <p>Note: Song URL fields are required</p>
                 <button class="sp-add-track secondary">Add Track</button>
                 <button class="sp-clear-playlist secondary">Clear Playlist</button>
                 <button class="sp-toggle-playlist">Toggle All</button>
@@ -104,23 +104,15 @@ class SimplePlaylist
                                 </div>
                                 <div class="sp-toggle-target">
 
-                                    <input type='text' placeholder='Title' 
-                                    class='sp-track-title'
-                                    name='sp-tracks[<?php echo $key ?>][title] ?>]' value='<?php echo $track['title'] ?>' required />
-                                    <input type='text' 
-                                    class='sp-track-artiste'
-                                    placeholder='Arti
+                                    <input type='text' placeholder='Title' class='sp-track-title' name='sp-tracks[<?php echo $key ?>][title] ?>]' value='<?php echo $track['title'] ?>' required />
+                                    <input type='text' class='sp-track-artiste' placeholder='Arti
                                 ste(s)' name='sp-tracks[<?php echo $key ?>][artiste]' value='<?php echo $track['artiste'] ?>' required />
                                     <div class='sp-input-music-upload-container'>
-                                        <input type='url' 
-                                         class='sp-track-url'
-                                         placeholder='Song URL' name='sp-tracks[<?php echo $key ?>][url]' value='<?php echo $track['url']  ?>' required />
+                                        <input type='url' class='sp-track-url' placeholder='Song URL' name='sp-tracks[<?php echo $key ?>][url]' value='<?php echo $track['url']  ?>' required />
                                         <button class="sp-upload">Upload</button>
                                     </div>
                                     <div class='sp-input-music-upload-container'>
-                                        <input type='url' 
-                                         class='sp-track-pic'
-                                         placeholder='Cover Image' name='sp-tracks[<?php echo $key ?>][pic]' value='<?php echo $track['pic']  ?>'  />
+                                        <input type='url' class='sp-track-pic' placeholder='Cover Image' name='sp-tracks[<?php echo $key ?>][pic]' value='<?php echo $track['pic']  ?>' />
                                         <button class="sp-upload-pic">Upload</button>
                                     </div>
                                     <input type="button" class="sp-remove-track secondary" value="Remove Track">
@@ -140,7 +132,7 @@ class SimplePlaylist
             // 'Sorry, no tracks was found on this playlist';
         ?>
             <div class='sp-track-input-form'>
-            <p>Note: Song URL fields are required</p>
+                <p>Note: Song URL fields are required</p>
                 <button class="sp-add-track secondary">Add Track</button>
                 <button class="sp-clear-playlist secondary">Clear Playlist</button>
                 <button class="sp-toggle-playlist">Toggle All</button>
@@ -160,7 +152,7 @@ class SimplePlaylist
                                     <button class="sp-upload">Upload</button>
                                 </div>
                                 <div class='sp-input-music-upload-container'>
-                                    <input type='url' placeholder='Cover Image' name='sp-tracks[1][pic]' class='sp-track-pic'  />
+                                    <input type='url' placeholder='Cover Image' name='sp-tracks[1][pic]' class='sp-track-pic' />
                                     <button class="sp-upload-pic">Upload</button>
                                 </div>
                                 <input type="button" class="sp-remove-track secondary" value="Remove Track">
@@ -172,7 +164,7 @@ class SimplePlaylist
                 <button class="sp-add-track secondary">Add Track</button>
                 <button class="sp-clear-playlist secondary">Clear Playlist</button>
             </div>
-        <?php
+<?php
 
         }
     }
@@ -182,9 +174,7 @@ class SimplePlaylist
             return;
         }
         $tracks = $_POST['sp-tracks'];
-        $settings = $_POST['sp-settings'];
         update_post_meta($post_id, 'sp-tracks', $tracks);
-        update_post_meta($post_id, 'sp-settings', $settings);
         // var_dump($track);
     }
     public function shortcode_text_metabox_output($post)
@@ -206,48 +196,48 @@ class SimplePlaylist
         $post_id = intval($args['id']);
         $post_meta = get_post_meta($post_id, 'sp-tracks', true);
         $tracks = $post_meta;
-        if ($tracks) { ?>
+        if ($tracks) {
+            $player_html = '
             <div class="cp-wrapper">
-            <div class="cp-container">
-                <div class="" id="cp-polygon">
-                    <div id="cp-play-options">
-                        <img src="<?php echo $ft_url ?>images/repeat-solid.svg">
+                <div class="cp-container">
+                    <div class="" id="cp-polygon">
+                        <div id="cp-play-options">
+                            <img src="' . $ft_url . 'images/repeat-solid.svg">
+                        </div>
                     </div>
-                </div>
-                <audio src="" id="cp-audio"></audio>
-                <?php foreach ($tracks as $key => $value) {
-                    # code...
-                ?>
-                    <div class="cp-track">
-                        <div class="cp-track-cont" data-id="<?php echo $key ?>" data-url="<?php echo $value['url'] ?>">
-                            <div class="cp-image-container">
-                                <img src="<?php echo  $value['pic'] ? $value['pic'] : $ft_url.'music-icon-photo.jpg' ?> ">
-                            </div>
-                            <div class="cp-middle">
-                                <div class="cp-track-info">
-                                    <span class="cp-track-title"><?php echo $value['title'] ?></span>
-                                    <span class="cp-track-artistes"><?php echo $value['artiste'] ?></span>
+                    <audio src="" id="cp-audio"></audio>';
+            foreach ($tracks as $key => $value) {
+                $track_pic = $value['pic'] ? $value['pic'] : $ft_url . 'music-icon-photo.jpg';
+                $player_html .= '
+                        <div class="cp-track">
+                            <div class="cp-track-cont" data-id="' . $key . '"data-url="' . $value['url'] . '">
+                                <div class="cp-image-container">
+                                    <img src="' . $track_pic . '">
                                 </div>
-                                <div class="cp-load-play-animation">
-                                    <span class="durTime"></span>
-                                    <div class="cp-pause-duration-container">
-                                        <div class="cp-pause-duration">
+                                <div class="cp-middle">
+                                    <div class="cp-track-info">
+                                        <span class="cp-track-title">' . $value['title'] . '</span>
+                                        <span class="cp-track-artistes">' . $value['artiste'] . '</span>
+                                    </div>
+                                    <div class="cp-load-play-animation">
+                                        <span class="durTime"></span>
+                                        <div class="cp-pause-duration-container">
+                                            <div class="cp-pause-duration">
+                                            </div>
+                                        </div>
+                                        <div class="cp-pause-play">
+                                            <img src="' . $ft_url . 'images/pause-solid.svg" alt="pause/play">
                                         </div>
                                     </div>
-                                    <div class="cp-pause-play">
-                                        <img src="<?php echo $ft_url ?>images/pause-solid.svg" alt="pause/play">
-                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="cp-end">
-                            <a href="<?php echo $value['url']?>" download=""><img src="<?php echo $ft_url ?>images/download-solid.svg"></a>
-                        </div>
-                    </div>
-                <?php } ?>
-            </div>
-            </div>
-<?php
+                            <div class="cp-end">
+                                <a href="' . $value['url'] . '" download=""><img src="' . $ft_url . 'images/download-solid.svg"></a>
+                            </div>
+                        </div>';
+            }
+            $player_html .= '</div></div>';
+            return $player_html;
         } else {
             return;
         }
