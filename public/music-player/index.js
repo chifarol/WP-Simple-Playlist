@@ -1,9 +1,7 @@
 const pluginAssetURL =
   "http://localhost/hypalong/wp-content/plugins/simple-playlist/public/music-player/";
 const audio = document.querySelector("#cp-audio");
-const replayOptions = document
-  .querySelector("#cp-play-options")
-  .querySelector("img");
+const replayOptions = document.querySelector("#cp-play-options");
 const tracks = document.querySelectorAll(".cp-track-cont");
 let replayState = "replay-all";
 let currentTrackId;
@@ -41,8 +39,7 @@ function getPausePlayButton() {
   const pausePlayButton = document
     .querySelector(".cp-selected")
     .querySelector(".cp-load-play-animation")
-    .querySelector(".cp-pause-play")
-    .querySelector("img");
+    .querySelector(".cp-pause-play");
   return pausePlayButton;
 }
 // Time of song
@@ -52,15 +49,21 @@ audio.addEventListener("ended", effectReplayStatus);
 replayOptions.addEventListener("click", (e) => {
   switch (replayState) {
     case "replay-all":
-      replayOptions.src = pluginAssetURL + "images/repeat-one-solid.svg";
+      replayOptions.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
+      <g ><path d="M5 46q-1.2 0-2.1-.9Q2 44.2 2 43V5q0-1.2.9-2.1Q3.8 2 5 2h38q1.2 0 2.1.9.9.9.9 2.1v38q0 1.2-.9 2.1-.9.9-2.1.9Zm9-2 2.1-2.2-4.3-4.3H38v-11h-3v8H11.8l4.3-4.3L14 28l-8 8Zm9.3-14.1h2.45V18H20.5v2.45h2.8ZM10 21.5h3v-8h23.2l-4.3 4.3L34 20l8-8-8-8-2.1 2.2 4.3 4.3H10Z"/>
+      </g></svg>`;
       replayState = "replay-once";
       break;
     case "replay-once":
-      replayOptions.src = pluginAssetURL + "images/repeat-solid-ash.svg";
+      replayOptions.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
+      <g >
+      <path d="M5 46q-1.2 0-2.1-.9Q2 44.2 2 43V5q0-1.2.9-2.1Q3.8 2 5 2h38q1.2 0 2.1.9.9.9.9 2.1v38q0 1.2-.9 2.1-.9.9-2.1.9Zm9-2 2.1-2.2-4.3-4.3H38v-11h-3v8H11.8l4.3-4.3L14 28l-8 8Zm-4-22.5h3v-8h23.2l-4.3 4.3L34 20l8-8-8-8-2.1 2.2 4.3 4.3H10Z"/>
+      </g></svg>`;
+      replayOptions.querySelector("svg").classList.add("gray");
       replayState = "replay-none";
       break;
     case "replay-none":
-      replayOptions.src = pluginAssetURL + "images/repeat-solid.svg";
+      replayOptions.querySelector("svg").classList.remove("gray");
       replayState = "replay-all";
       break;
 
@@ -120,11 +123,11 @@ tracks.forEach((track) => {
           audio.play();
         } else {
           if (audio.paused) {
-            playButton.src = pluginAssetURL + "images/pause-solid.svg";
+            playButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"> <g > <path d="M26.25 38V10H38v28ZM10 38V10h11.75v28Z"/> </g> </svg>`;
             audio.play();
           } else {
             audio.pause();
-            playButton.src = pluginAssetURL + "images/play-arrow-solid.svg";
+            playButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><g ><path d="M16 37.85v-28l22 14Z"/> </g> </svg>`;
           }
         }
       } else if (e.target == getCurTrackDurSliderContainer()) {

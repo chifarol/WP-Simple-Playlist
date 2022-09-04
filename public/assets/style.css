@@ -80,3 +80,23 @@
 .sp-remove-track {
     cursor: pointer;
 }
+
+#sp-settings-form>div {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    width: 180px;
+}
+
+#sp-settings-form>div>input {
+    margin-left: auto;
+}
+
+#sp-settings-form>div>label {}
+
+#sp-settings-form>input {
+    background-color: #2271b1;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+}

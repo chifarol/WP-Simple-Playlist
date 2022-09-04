@@ -9,8 +9,8 @@
  * Author: Ilodigwe Chinaza
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: chifa
- * Domain Path: /public/lang
+ * Text Domain: simple-playlist
+ * Domain Path: /languages
  */
 
 //plugin license (primary file)

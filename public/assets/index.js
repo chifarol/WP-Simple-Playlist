@@ -5,6 +5,11 @@ const spTogglePlaylistButtons = document.querySelectorAll(
 );
 let spremoveTrackButtons = document.querySelectorAll(".sp-remove-track");
 let spFormContainer = document.querySelector("#sp-track-container");
+const mColorInput = document.querySelector("#sp-settings-mcolor");
+const tColorInput = document.querySelector("#sp-settings-tcolor");
+const aColorInput = document.querySelector("#sp-settings-acolor");
+const sColorInput = document.querySelector("#sp-settings-scolor");
+const pColorInput = document.querySelector("#sp-settings-pcolor");
 
 function getToggleTarget(el) {
   return el.querySelector(".sp-toggle-target");
@@ -25,7 +30,7 @@ spaddTrackButtons.forEach((button) => {
     } else {
       nextKey = 1;
     }
-    const newFieldset = `<fieldset data-key='${nextKey}'><div class="sp-toggle"> <h4></h4><span> &#9650;</span></div> <div class="sp-toggle-target"> <input type='text' placeholder='Title' name='sp-tracks[${nextKey}][title]' class="sp-track-title" required/> <input type='text' placeholder='Artiste(s)' name='sp-tracks[${nextKey}][artiste]' class="sp-track-artiste" required/> <div class='sp-input-music-upload-container'>  <input type='text' placeholder='Song URL' name='sp-tracks[${nextKey}][url]' class="sp-track-url" required/> <button class="sp-upload" >Upload</button>  </div><div class='sp-input-music-upload-container'> <input type='url' placeholder='Cover Image' name='sp-tracks[1][url]' class='sp-track-pic'  /> <button class="sp-upload-pic" >Upload</button>  
+    const newFieldset = `<fieldset data-key='${nextKey}'><div class="sp-toggle"> <h4></h4><span> &#9650;</span></div> <div class="sp-toggle-target"> <input type='text' placeholder=${sp_scripts.newField.p_title} name='sp-tracks[${nextKey}][title]' class="sp-track-title" required/> <input type='text' placeholder=${sp_scripts.newField.p_artiste} name='sp-tracks[${nextKey}][artiste]' class="sp-track-artiste" required/> <div class='sp-input-music-upload-container'>  <input type='text' placeholder=${sp_scripts.newField.p_url} name='sp-tracks[${nextKey}][url]' class="sp-track-url" required/> <button class="sp-upload" >Upload</button>  </div><div class='sp-input-music-upload-container'> <input type='url' placeholder=${sp_scripts.newField.p_image} name='sp-tracks[${nextKey}][pic]' class='sp-track-pic'  /> <button class="sp-upload-pic" >Upload</button>  
 </div> <input type="button" class="sp-remove-track secondary" value="Remove Track"></div></fieldset>`;
 
     if (lastFieldSet) {
@@ -44,10 +49,14 @@ spaddTrackButtons.forEach((button) => {
 function spRegisterRemoveButtons() {
   spremoveTrackButtons = document.querySelectorAll(".sp-remove-track");
   spremoveTrackButtons.forEach((button) => {
-    button.addEventListener("click", (e) => {
-      e.preventDefault();
-      button.parentElement.parentElement.remove();
-    });
+    button.addEventListener(
+      "click",
+      (e) => {
+        e.preventDefault();
+        button.parentElement.parentElement.remove();
+      },
+      { once: true }
+    );
   });
 }
 function registerTitles() {
@@ -104,7 +113,12 @@ spTogglePlaylistButtons.forEach((button) => {
 spclearPlaylistButtons.forEach((button) => {
   button.addEventListener("click", (e) => {
     e.preventDefault();
-    spFormContainer.innerHTML = "";
+    let warning = confirm(`${sp_scripts.warning.clear}`);
+    if (warning) {
+      spFormContainer.innerHTML = "";
+    } else {
+      return;
+    }
   });
 });
 
@@ -196,3 +210,28 @@ spRegisterRemoveButtons();
 registerTogglers();
 registerTitles();
 registerUploadButtons();
+
+mColorInput.addEventListener("change", () => {
+  document.querySelector(".cp-container").style.background = mColorInput.value;
+  document.querySelector("#cp-polygon").style.background = mColorInput.value;
+});
+tColorInput.addEventListener("change", () => {
+  document
+    .querySelectorAll(".cp-track")
+    .forEach((e) => (e.style.background = tColorInput.value));
+});
+aColorInput.addEventListener("change", () => {
+  document.querySelector(".cp-pause-duration").style.background =
+    aColorInput.value;
+  document.querySelector(".cp-track.cp-selected").style.color =
+    aColorInput.value;
+  document.querySelector(".cp-pause-play svg").style.fill = aColorInput.value;
+  document.querySelector("#cp-play-options svg").style.fill = aColorInput.value;
+});
+sColorInput.addEventListener("change", () => {
+  document.querySelector(".cp-pause-duration").style.boxShadow =
+    "0px 0px 18px 0px " + sColorInput.value;
+});
+pColorInput.addEventListener("change", () => {
+  document.querySelector(".cp-end svg").style.fill = pColorInput.value;
+});
