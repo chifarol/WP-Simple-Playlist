@@ -233,5 +233,8 @@ sColorInput.addEventListener("change", () => {
     "0px 0px 18px 0px " + sColorInput.value;
 });
 pColorInput.addEventListener("change", () => {
-  document.querySelector(".cp-end svg").style.fill = pColorInput.value;
+  document
+    .querySelectorAll(".cp-end svg")
+    .forEach((e) => (e.style.fill = pColorInput.value));
+  document.querySelector(".cp-container").style.color = pColorInput.value;
 });

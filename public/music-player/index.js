@@ -18,6 +18,14 @@ function getCurrentTimeDisplay() {
     .querySelector(".durTime");
   return currTime;
 }
+function getCurrentTrackLoader() {
+  const currentTrackLoader = document
+    .querySelector(".cp-selected")
+    .querySelector(".cp-track-cont")
+    .querySelector(".cp-image-container")
+    .querySelector(".cp-loading");
+  return currentTrackLoader;
+}
 function getCurrentTrackDurationSlider() {
   const durSlider = document
     .querySelector(".cp-selected")
@@ -46,6 +54,9 @@ function getPausePlayButton() {
 audio.addEventListener("timeupdate", DurTime);
 audio.addEventListener("timeupdate", updateProgress);
 audio.addEventListener("ended", effectReplayStatus);
+audio.addEventListener("canplaythrough", () => {
+  getCurrentTrackLoader().style.display = "";
+});
 replayOptions.addEventListener("click", (e) => {
   switch (replayState) {
     case "replay-all":
@@ -115,11 +126,13 @@ tracks.forEach((track) => {
         const playButton = getPausePlayButton();
         if (track.parentElement != outgoingTrack) {
           //remove 'cp-selected' from class list of outgoing track
+          getCurrentTrackLoader().style.display = "";
           outgoingTrack.classList.remove("cp-selected");
           track.parentElement.classList.add("cp-selected");
           //get incoming track's id and map to track array
 
           audio.src = loadTrack(track.dataset.id);
+          getCurrentTrackLoader().style.display = "flex";
           audio.play();
         } else {
           if (audio.paused) {
@@ -141,6 +154,7 @@ tracks.forEach((track) => {
       }
     } else {
       track.parentElement.classList.add("cp-selected");
+      getCurrentTrackLoader().style.display = "flex";
       //get incoming track's id and map to track array
       audio.src = loadTrack(track.dataset.id);
       audio.play();

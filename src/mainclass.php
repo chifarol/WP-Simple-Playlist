@@ -43,11 +43,11 @@ class SimplePlaylist
         add_action('init', [$this, 'register_assets']);
         $settings = get_option('sp-settings', []);
 
-        $mcolor = $settings['mcolor'] ? esc_html($settings['mcolor']) : "#202020";
-        $tcolor = $settings['tcolor'] ? esc_html($settings['tcolor']) : "#3e3e3e";
-        $acolor = $settings['acolor'] ? esc_html($settings['acolor']) : "#7fd84b";
-        $scolor = $settings['scolor'] ? esc_html($settings['scolor']) : "#000";
-        $pcolor = $settings['pcolor'] ? esc_html($settings['pcolor']) : "#fff";
+        $mcolor = array_key_exists('mcolor', $settings) ? esc_html($settings['mcolor']) : "#202020";
+        $tcolor = array_key_exists('tcolor', $settings) ? esc_html($settings['tcolor']) : "#3e3e3e";
+        $acolor = array_key_exists('acolor', $settings) ? esc_html($settings['acolor']) : "#7fd84b";
+        $scolor = array_key_exists('scolor', $settings) ? esc_html($settings['scolor']) : "#000";
+        $pcolor = array_key_exists('pcolor', $settings) ? esc_html($settings['pcolor']) : "#ffffff";
         $this->music_player_custom_style = '
         .cp-container {
         background: ' . $mcolor . ';
@@ -87,13 +87,13 @@ class SimplePlaylist
         add_action('admin_menu', [$this, 'add_settings_page']);
         add_action('add_meta_boxes', [$this, 'register_metaboxes']);
         add_action('save_post_sp_playlist', [$this, 'save_tracks_meta'], 10, 2);
-        add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets'], 50);
         add_action('load-edit.php?post_type=sp_playlist_page_sp-settings', [$this,  'sp_settings_save_options']);
     }
     public function frontend_init()
     {
         add_action('init', [$this, 'register_shortcodes']);
-        add_action('wp_enqueue_scripts', [$this, 'enqueue_frontend_assets']);
+        add_action('wp_enqueue_scripts', [$this, 'enqueue_frontend_assets'], 50);
     }
     public function load_text_domain()
     {
@@ -155,25 +155,24 @@ class SimplePlaylist
         if (isset($_POST['sp-settings']) && wp_verify_nonce($_POST['sp-settings-nce'], __FILE__)) {
             $settings = $_POST['sp-settings'];
 
-            $settings['mcolor'] = esc_html($settings['mcolor']);
-            $settings['tcolor'] = esc_html($settings['tcolor']);
-            $settings['acolor'] = esc_url($settings['acolor']);
-            $settings['scolor'] = esc_url($settings['scolor']);
+            $settings['mcolor'] = esc_attr($settings['mcolor']);
+            $settings['tcolor'] = esc_attr($settings['tcolor']);
+            $settings['acolor'] = esc_attr($settings['acolor']);
+            $settings['scolor'] = esc_attr($settings['scolor']);
 
             update_option('sp-settings', $settings);
         }
         $settings = get_option('sp-settings', []);
-
-        $mcolor = $settings['mcolor'] ? $settings['mcolor'] : "#202020";
-        $tcolor = $settings['tcolor'] ? $settings['tcolor'] : "#3e3e3e";
-        $acolor = $settings['acolor'] ? $settings['acolor'] : "#7fd84b";
-        $scolor = $settings['scolor'] ? $settings['scolor'] : "#000";
-        $pcolor = $settings['pcolor'] ? $settings['pcolor'] : "#fff";
-
+        $mcolor = array_key_exists('mcolor', $settings) ? esc_html($settings['mcolor']) : "#202020";
+        $tcolor = array_key_exists('tcolor', $settings) ? esc_html($settings['tcolor']) : "#3e3e3e";
+        $acolor = array_key_exists('acolor', $settings) ? esc_html($settings['acolor']) : "#7fd84b";
+        $scolor = array_key_exists('scolor', $settings) ? esc_html($settings['scolor']) : "#000";
+        $pcolor = array_key_exists('pcolor', $settings) ? esc_html($settings['pcolor']) : "#ffffff";
 ?>
-        <div class="wrap">
+
+        <div>
             <form action="" method="post" id="sp-settings-form">
-                <h2><?php esc_html_e('Color Settings', 'simple-playlist')?></h2>
+                <h2><?php esc_html_e('Color Settings', 'simple-playlist') ?></h2>
                 <?php wp_nonce_field(__FILE__, 'sp-settings-nce') ?>
                 <div>
                     <label for="sp-mcolor"><?php esc_html_e('Background Color: ', 'simple-playlist') ?></label>
@@ -198,8 +197,8 @@ class SimplePlaylist
                 <input type="submit" value="<?php esc_html_e('Save', 'simple-playlist') ?>" />
             </form>
             <div class="sp-showcase">
-                <h2><?php esc_html_e('Sample Playlist', 'simple-playlist')?></h2>
-                <p><?php esc_html_e('<b>Note: </b>If changes does not reflect after saving please refresh', 'simple-playlist')?></p>
+                <h2><?php esc_html_e('Sample Playlist', 'simple-playlist') ?></h2>
+                <p><b><?php esc_html_e('Note: ', 'simple-playlist') ?> </b> <?php esc_html_e('If changes does not reflect after saving please refresh', 'simple-playlist') ?></p>
                 <div class="cp-wrapper">
                     <div class="cp-container">
                         <div class="" id="cp-polygon">
@@ -287,6 +286,7 @@ class SimplePlaylist
                 </div>
             </div>
         </div>
+
         <?php }
 
     public function register_metaboxes()
@@ -432,7 +432,7 @@ class SimplePlaylist
                         </g></svg>
                         </div>
                     </div>
-                    <audio src="" id="cp-audio"></audio>';
+                    <audio src="" id="cp-audio" preload="auto"></audio>';
             foreach ($tracks as $key => $value) {
                 $track_pic = $ft_url . 'images/music-icon-photo.jpg';
                 if (array_key_exists('pic', $value) && trim($value['pic']) != '') {
@@ -446,6 +446,9 @@ class SimplePlaylist
                             <div class="cp-track-cont" data-id="' . $key . '"data-url="' . esc_attr($value['url']) . '">
                                 <div class="cp-image-container">
                                     <img src="' . esc_attr($track_pic) . '">
+                                    <div class="cp-loading">
+                                    <div class="cp-loading-circle"></div>
+                                    </div>
                                 </div>
                                 <div class="cp-middle">
                                     <div class="cp-track-info">
@@ -496,8 +499,15 @@ class SimplePlaylist
 
         $this->register_post_types();
         $this->register_postmeta();
+        $settings = [];
+        $settings['mcolor'] = "#202020";
+        $settings['tcolor'] = "#3e3e3e";
+        $settings['acolor'] = "#7fd84b";
+        $settings['scolor'] = "#000";
+        $settings['pcolor'] = "#ffffff";
 
-        do_action('simpleplaylist_deactivated');
+        update_option('sp-settings', $settings);
+        do_action('simpleplaylist_activated');
 
         flush_rewrite_rules();
     }
@@ -508,7 +518,7 @@ class SimplePlaylist
         }
 
         unregister_post_type($this->post_type);
-
+        delete_option('sp-settings');
         do_action('simpleplaylist_deactivated');
 
         flush_rewrite_rules();
