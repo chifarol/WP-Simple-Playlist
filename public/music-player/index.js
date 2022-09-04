@@ -99,6 +99,7 @@ function effectReplayStatus() {
       );
       nextTrackContainer.parentElement.classList.add("cp-selected");
       audio.src = loadTrack(nextTrackId);
+      getCurrentTrackLoader().style.display = "flex";
       audio.play();
       break;
     case "replay-once":
