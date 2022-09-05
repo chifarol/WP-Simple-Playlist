@@ -7,10 +7,23 @@ let replayState = "replay-all";
 let currentTrackId;
 let trackSrcArray = {};
 let trackIds = [];
+
+/**
+ * Get music src
+ * - Sets value of CurrentTrackId
+ * - Returns url of next track
+ *
+ * @param {number} trackId - track index to load
+ * @returns {string}
+ */
 function loadTrack(trackId) {
   currentTrackId = trackId;
   return trackSrcArray[trackId];
 }
+/**
+ * Get HTML element that displays time
+ * @returns {object}
+ */
 function getCurrentTimeDisplay() {
   const currTime = document
     .querySelector(".cp-selected")
@@ -18,6 +31,10 @@ function getCurrentTimeDisplay() {
     .querySelector(".durTime");
   return currTime;
 }
+/**
+ * Get HTML element with spinning loader for current track
+ * @returns {object}
+ */
 function getCurrentTrackLoader() {
   const currentTrackLoader = document
     .querySelector(".cp-selected")
@@ -26,6 +43,10 @@ function getCurrentTrackLoader() {
     .querySelector(".cp-loading");
   return currentTrackLoader;
 }
+/**
+ * Get HTML elemnt with spinning loader
+ * @returns {object}
+ */
 function getCurrentTrackDurationSlider() {
   const durSlider = document
     .querySelector(".cp-selected")
@@ -35,6 +56,10 @@ function getCurrentTrackDurationSlider() {
     .querySelector(".cp-pause-duration");
   return durSlider;
 }
+/**
+ * Get HTML element for track seek background
+ * @returns {object}
+ */
 function getCurTrackDurSliderContainer() {
   const durSliderContainer = document
     .querySelector(".cp-selected")
@@ -43,6 +68,10 @@ function getCurTrackDurSliderContainer() {
     .querySelector(".cp-pause-duration-container");
   return durSliderContainer;
 }
+/**
+ * Get Play/Pause svg HTML element
+ * @returns {object}
+ */
 function getPausePlayButton() {
   const pausePlayButton = document
     .querySelector(".cp-selected")
@@ -50,13 +79,15 @@ function getPausePlayButton() {
     .querySelector(".cp-pause-play");
   return pausePlayButton;
 }
-// Time of song
+
 audio.addEventListener("timeupdate", DurTime);
 audio.addEventListener("timeupdate", updateProgress);
 audio.addEventListener("ended", effectReplayStatus);
 audio.addEventListener("canplaythrough", () => {
   getCurrentTrackLoader().style.display = "";
 });
+
+// update replay state and icon
 replayOptions.addEventListener("click", (e) => {
   switch (replayState) {
     case "replay-all":
@@ -82,6 +113,10 @@ replayOptions.addEventListener("click", (e) => {
       break;
   }
 });
+
+/**
+ * implement replay state
+ */
 function effectReplayStatus() {
   switch (replayState) {
     case "replay-all":
@@ -113,24 +148,23 @@ function effectReplayStatus() {
       break;
   }
 }
+
+// load track on click
 tracks.forEach((track) => {
   trackSrcArray[track.dataset.id] = track.dataset.url;
   trackIds.push(track.dataset.id);
-  // console.dir(trackSrcArray);
-  // trackSrcArray.push(track.dataset.url);
-  // trackSrcArray.sort();
   track.addEventListener("click", (e) => {
-    //get outgoing track
+    // get outgoing track
     const outgoingTrack = document.querySelector(".cp-selected");
     if (outgoingTrack) {
       if (e.target !== getCurTrackDurSliderContainer()) {
         const playButton = getPausePlayButton();
         if (track.parentElement != outgoingTrack) {
-          //remove 'cp-selected' from class list of outgoing track
+          // remove 'cp-selected' from class list of outgoing track
           getCurrentTrackLoader().style.display = "";
           outgoingTrack.classList.remove("cp-selected");
           track.parentElement.classList.add("cp-selected");
-          //get incoming track's id and map to track array
+          // get incoming track's id and map to track array
 
           audio.src = loadTrack(track.dataset.id);
           getCurrentTrackLoader().style.display = "flex";
@@ -145,6 +179,7 @@ tracks.forEach((track) => {
           }
         }
       } else if (e.target == getCurTrackDurSliderContainer()) {
+        // audio seeking
         const durSliderCont = getCurTrackDurSliderContainer();
         const durSlider = durSliderCont.querySelector(".cp-pause-duration");
         console.log("slider pressed");
@@ -154,17 +189,18 @@ tracks.forEach((track) => {
         audio.currentTime = (clickX / width) * duration;
       }
     } else {
+      // get new track
       track.parentElement.classList.add("cp-selected");
       getCurrentTrackLoader().style.display = "flex";
-      //get incoming track's id and map to track array
       audio.src = loadTrack(track.dataset.id);
       audio.play();
     }
   });
-
-  function timekeeping() {}
 });
 
+/**
+ * Update Time display HTML element
+ */
 function DurTime(e) {
   const { currentTime } = e.srcElement;
   var sec;
@@ -195,6 +231,10 @@ function DurTime(e) {
   let currTime = getCurrentTimeDisplay();
   currTime.innerHTML = min + ":" + sec;
 }
+
+/**
+ * Update track duration while playing
+ */
 function updateProgress(e) {
   const { duration, currentTime } = e.srcElement;
   const progressPercent = (currentTime / duration) * 100;

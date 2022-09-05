@@ -11,13 +11,7 @@ const aColorInput = document.querySelector("#sp-settings-acolor");
 const sColorInput = document.querySelector("#sp-settings-scolor");
 const pColorInput = document.querySelector("#sp-settings-pcolor");
 
-function getToggleTarget(el) {
-  return el.querySelector(".sp-toggle-target");
-}
-function getTitleText(el) {
-  return el.querySelector(".sp-toggle-target");
-}
-
+// add new Fieldset DOM
 spaddTrackButtons.forEach((button) => {
   button.addEventListener("click", (e) => {
     e.preventDefault();
@@ -38,7 +32,7 @@ spaddTrackButtons.forEach((button) => {
     } else {
       spFormContainer.innerHTML = newFieldset;
     }
-
+    // Re-register necessary DOM elements
     spRegisterRemoveButtons();
     registerTogglers();
     registerTitles();
@@ -46,6 +40,9 @@ spaddTrackButtons.forEach((button) => {
   });
 });
 
+/**
+ * assign listener to 'Remove Track' buttons
+ */
 function spRegisterRemoveButtons() {
   spremoveTrackButtons = document.querySelectorAll(".sp-remove-track");
   spremoveTrackButtons.forEach((button) => {
@@ -59,6 +56,9 @@ function spRegisterRemoveButtons() {
     );
   });
 }
+/**
+ * assign listener to 'Title' fields
+ */
 function registerTitles() {
   const titleInputs = document.querySelectorAll(".sp-track-title");
   titleInputs.forEach((title) => {
@@ -69,6 +69,9 @@ function registerTitles() {
     });
   });
 }
+/**
+ * assign listener to 'Remove Track' buttons
+ */
 function registerTogglers() {
   const toggleBars = document.querySelectorAll(".sp-toggle");
   toggleBars.forEach((toggleBar) => {
@@ -93,6 +96,7 @@ function registerTogglers() {
   return toggleBars;
 }
 
+// assign listener to "Toggle ALl" button
 spTogglePlaylistButtons.forEach((button) => {
   button.addEventListener("click", (e) => {
     e.preventDefault();
@@ -110,6 +114,8 @@ spTogglePlaylistButtons.forEach((button) => {
     });
   });
 });
+
+// assign listener to 'Clear Playlist' button
 spclearPlaylistButtons.forEach((button) => {
   button.addEventListener("click", (e) => {
     e.preventDefault();
@@ -122,7 +128,7 @@ spclearPlaylistButtons.forEach((button) => {
   });
 });
 
-//WP Core upload functionality
+// assign listener to 'Upload' button - WP upload modal
 function registerUploadButtons() {
   jQuery(document).ready(function ($) {
     let spMediaUploader;
@@ -211,15 +217,18 @@ registerTogglers();
 registerTitles();
 registerUploadButtons();
 
+// assign listener to 'Main Color' input field
 mColorInput.addEventListener("change", () => {
   document.querySelector(".cp-container").style.background = mColorInput.value;
   document.querySelector("#cp-polygon").style.background = mColorInput.value;
 });
+// assign listener to 'Track Color' input field
 tColorInput.addEventListener("change", () => {
   document
     .querySelectorAll(".cp-track")
     .forEach((e) => (e.style.background = tColorInput.value));
 });
+// assign listener to 'Accent Color' input field
 aColorInput.addEventListener("change", () => {
   document.querySelector(".cp-pause-duration").style.background =
     aColorInput.value;
@@ -228,10 +237,12 @@ aColorInput.addEventListener("change", () => {
   document.querySelector(".cp-pause-play svg").style.fill = aColorInput.value;
   document.querySelector("#cp-play-options svg").style.fill = aColorInput.value;
 });
+// assign listener to 'Shadow Color' input field
 sColorInput.addEventListener("change", () => {
   document.querySelector(".cp-pause-duration").style.boxShadow =
     "0px 0px 18px 0px " + sColorInput.value;
 });
+// assign listener to 'Primary Color' input field
 pColorInput.addEventListener("change", () => {
   document
     .querySelectorAll(".cp-end svg")

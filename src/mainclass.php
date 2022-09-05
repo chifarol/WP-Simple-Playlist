@@ -1,23 +1,45 @@
 <?php
 class SimplePlaylist
 {
+    /**
+     * Instance of Simple Playlist Class.
+     * @since   1.0.0
+     */
     protected static $instance = null;
+    /**
+     * Post type Name.
+     * @since   1.0.0
+     */
     public  $post_type = 'sp_playlist';
+    /**
+     * Admin color customizer styling.
+     * @since   1.0.0
+     */
     public  $music_player_custom_style = '';
+
+    /**
+     * URL of plugin directory.
+     * @since   1.0.0
+     */
     protected static $plugin_url = '';
+    /**
+     * Abs. Path of plugin directory.
+     * @since   1.0.0
+     */
     protected static $plugin_path = '';
     /**
-     * SimplaPlaylist constructor. Intentionally left empty so that instances can be created without
-     * re-loading of resources (e.g. scripts/styles), or re-registering hooks.
-     * http://wordpress.stackexchange.com/questions/70055/best-way-to-initiate-a-class-in-a-wp-plugin
-     * https://gist.github.com/toscho/3804204
+     * Simple Playlist constructor. 
      *
      * @since 1.0.0
      */
     public function __construct()
     {
     }
-
+    /**
+     * Instantiates Simple Playlist Class.
+     * @since 1.0.0
+     * @return SimplePlayist
+     */
     public static function instance()
     {
         if (is_null(self::$instance)) {
@@ -25,6 +47,10 @@ class SimplePlaylist
         }
         return self::$instance;
     }
+    /**
+     * Runs the necessary plugin setup routine.
+     * @since 1.0.0
+     */
     public function plugin_setup()
     {
         self::$plugin_url  = plugin_dir_url(__FILE__);
@@ -36,6 +62,10 @@ class SimplePlaylist
         $this->frontend_init();
         do_action('audioigniter_loaded');
     }
+    /**
+     * Register general actions, loads custom playlist colors/style.
+     * @since 1.0.0
+     */
     public function init()
     {
         add_action('init', [$this, 'load_text_domain']);
@@ -82,6 +112,10 @@ class SimplePlaylist
         }
         ';
     }
+    /**
+     * register admin actions.
+     * @since 1.0.0
+     */
     public function admin_init()
     {
         add_action('admin_menu', [$this, 'add_settings_page']);
@@ -90,16 +124,28 @@ class SimplePlaylist
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets'], 50);
         add_action('load-edit.php?post_type=sp_playlist_page_sp-settings', [$this,  'sp_settings_save_options']);
     }
+    /**
+     * Register actions necessary for frontend.
+     * @since 1.0.0
+     */
     public function frontend_init()
     {
         add_action('init', [$this, 'register_shortcodes']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_frontend_assets'], 50);
     }
+    /**
+     * loads text domain.
+     * @since 1.0.0
+     */
     public function load_text_domain()
     {
         //frontend scripts
         load_plugin_textdomain('simple-playlist', false, 'simple-playlist/languages');
     }
+    /**
+     * Register all scripts and stylesheets.
+     * @since 1.0.0
+     */
     public function register_assets()
     {
         //frontend scripts
@@ -120,6 +166,10 @@ class SimplePlaylist
             ]
         ]);
     }
+    /**
+     * Enqueue all frontend scripts and styles.
+     * @since 1.0.0
+     */
     public function enqueue_frontend_assets()
     {
 
@@ -127,6 +177,10 @@ class SimplePlaylist
         wp_enqueue_style('frontend-music-player-css');
         wp_add_inline_style('frontend-music-player-css', $this->music_player_custom_style);
     }
+    /**
+     * Enqueue all admin scripts and stylesheets.
+     * @since 1.0.0
+     */
     public function enqueue_admin_assets()
     {
         wp_enqueue_script('admin-script');
@@ -135,10 +189,18 @@ class SimplePlaylist
         wp_add_inline_style('frontend-music-player-css', $this->music_player_custom_style);
         wp_enqueue_media();
     }
+    /**
+     * Register playlist's shortcode.
+     * @since 1.0.0
+     */
     public function register_shortcodes()
     {
         add_shortcode('sp_playlist', [$this, 'shortcode_output']);
     }
+    /**
+     * Register 'Settings' submenu for post type.
+     * @since 1.0.0
+     */
     public function add_settings_page()
     {
         add_submenu_page(
@@ -150,6 +212,10 @@ class SimplePlaylist
             [$this, 'settings_page_output']
         );
     }
+    /**
+     * Render content of 'Settings' submenu.
+     * @since 1.0.0
+     */
     public function settings_page_output()
     {
         if (isset($_POST['sp-settings']) && wp_verify_nonce($_POST['sp-settings-nce'], __FILE__)) {
@@ -159,6 +225,7 @@ class SimplePlaylist
             $settings['tcolor'] = esc_attr($settings['tcolor']);
             $settings['acolor'] = esc_attr($settings['acolor']);
             $settings['scolor'] = esc_attr($settings['scolor']);
+            $settings['pcolor'] = esc_attr($settings['pcolor']);
 
             update_option('sp-settings', $settings);
         }
@@ -289,12 +356,21 @@ class SimplePlaylist
 
         <?php }
 
+    /**
+     * Register all metaboxes for post type.
+     *
+     * @since 1.0.0
+     */
     public function register_metaboxes()
     {
         add_meta_box('sp-track-meta-box', esc_html__('Tracks', 'simple-playlist'), [$this, 'tracks_metabox_output'], $this->post_type, 'advanced', 'high');
         add_meta_box('sp-shortcode_text-meta-box', esc_html__('Shortcode', 'simple-playlist'), [$this, 'shortcode_text_metabox_output'], $this->post_type, 'side', 'low');
-        add_meta_box('sp-settings-meta-box', esc_html__('Settings', 'simple-playlist'), [$this, 'shortcode_settings_output'], $this->post_type, 'side', 'normal');
     }
+    /**
+     * Render metabox contents.
+     *
+     * @since 1.0.0
+     */
     public function tracks_metabox_output($post)
     {
         $tracks = get_post_meta($post->ID, 'sp-tracks');
@@ -345,7 +421,7 @@ class SimplePlaylist
                     </div>
                 </form>
                 <button class="sp-add-track secondary"><?php esc_html_e('Add Track', 'simple-playlist') ?></button>
-                <button class="sp-clear-playlist secondary"><?php esc_html_e('Clear Playlist', 'simple-playlist') ?></button>
+                <button class="sp-clear-playlist secondary"><?php esc_html_e('Clear Playlist', 'simple-playlist') ?></button><button class="sp-toggle-playlist"><?php esc_html_e('Toggle All', 'simple-playlist') ?></button>
             </div>
         <?php      } else {
             // 'Sorry, no tracks was found on this playlist';
@@ -381,12 +457,17 @@ class SimplePlaylist
                     </div>
                 </form>
                 <button class="sp-add-track secondary"><?php esc_html_e('Add Track', 'simple-playlist') ?></button>
-                <button class="sp-clear-playlist secondary"><?php esc_html_e('Clear Playlist', 'simple-playlist') ?></button>
+                <button class="sp-clear-playlist secondary"><?php esc_html_e('Clear Playlist', 'simple-playlist') ?></button><button class="sp-toggle-playlist"><?php esc_html_e('Toggle All', 'simple-playlist') ?></button>
             </div>
 <?php
 
         }
     }
+    /**
+     * Save metabox fields to post's meta.
+     *
+     * @since 1.0.0
+     */
     public function save_tracks_meta($post_id, $post)
     {
         if (!isset($_POST['sp-tracks']) || !wp_verify_nonce($_POST['sp-track-nce'], __FILE__)) {
@@ -401,15 +482,16 @@ class SimplePlaylist
         }
         update_post_meta($post_id, 'sp-tracks', $tracks);
     }
+
     public function shortcode_text_metabox_output($post)
     {
         echo '[' . $this->post_type . ' id=\'' . $post->ID . '\']';
     }
-    public function shortcode_settings_output($post)
-    {
-        // $download = get_post_meta($post_id, 'sp-settings', true)['download-link'];
-        echo ' ';
-    }
+    /**
+     * Render playlist shortcode on frontend.
+     *
+     * @since 1.0.0
+     */
     public function shortcode_output($attr)
     {
         $ft_url = content_url('plugins/simple-playlist/public/music-player/');
@@ -483,6 +565,11 @@ class SimplePlaylist
             return;
         }
     }
+    /**
+     * Register post type meta fields.
+     *
+     * @since 1.0.0
+     */
     public function register_postmeta()
     {
         $args = [
@@ -491,6 +578,11 @@ class SimplePlaylist
         ];
         register_post_meta($this->post_type, 'sp-tracks', $args);
     }
+    /**
+     * Actions to run on plugin activation.
+     *
+     * @since 1.0.0
+     */
     protected function plugin_activated()
     {
         if (!current_user_can('activate_plugins')) {
@@ -511,6 +603,11 @@ class SimplePlaylist
 
         flush_rewrite_rules();
     }
+    /**
+     * Actions to run on plugin de-activation.
+     *
+     * @since 1.0.0
+     */
     protected function plugin_deactivated()
     {
         if (!current_user_can('activate_plugins')) {
@@ -523,6 +620,11 @@ class SimplePlaylist
 
         flush_rewrite_rules();
     }
+    /**
+     * Register Simple Playlist Post Type.
+     *
+     * @since 1.0.0
+     */
     public function register_post_types()
     {
         $labels = array(
