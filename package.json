@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "adminjs": "babel public/assets/index.js --out-file public/assets/main.js ",
+    "frontjs": "babel public/music-player/index.js -d public/music-player/main.js "
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/chifarol/WP-Simple-Playlist/issues"
   },
-  "homepage": "https://github.com/chifarol/WP-Simple-Playlist#readme"
+  "homepage": "https://github.com/chifarol/WP-Simple-Playlist#readme",
+  "dependencies": {
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.18.13",
+    "@babel/preset-env": "^7.18.10"
+  }
 }
