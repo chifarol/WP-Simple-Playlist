@@ -52,6 +52,7 @@
 
 .sp-toggle span {
   margin-left: auto;
+  color: #000;
 }
 
 .sp-toggle span:target {
