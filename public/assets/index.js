@@ -226,7 +226,7 @@ function registerUploadButtons() {
           multiple: false,
         });
         spMediaUploader.on("select", function () {
-          attachment = spMediaUploader
+          var attachment = spMediaUploader
             .state()
             .get("selection")
             .first()
