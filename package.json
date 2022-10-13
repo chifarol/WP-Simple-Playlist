@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "adminjs": "babel public/assets/index.js --out-file public/assets/main.js ",
-    "frontjs": "babel public/music-player/index.js -d public/music-player/main.js "
+    "adminjs": "babel public/assets/index.js --out-file public/assets/index.js ",
+    "frontjs": "babel public/music-player/index.js -d public/music-player/index.js "
   },
   "repository": {
     "type": "git",

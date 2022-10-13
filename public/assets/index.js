@@ -25,14 +25,37 @@ spaddTrackButtons.forEach(function (button) {
       nextKey = 1;
     }
 
-    var newFieldset = "<fieldset data-key='".concat(nextKey, "'><div class=\"sp-toggle\"> <h4></h4><span> &#9650;</span></div> <div class=\"sp-toggle-target\"> <input type='text' placeholder=").concat(sp_scripts.newField.p_title, " name='sp-tracks[").concat(nextKey, "][title]' class=\"sp-track-title\" required/> <input type='text' placeholder=").concat(sp_scripts.newField.p_artiste, " name='sp-tracks[").concat(nextKey, "][artiste]' class=\"sp-track-artiste\" required/> <div class='sp-input-music-upload-container'>  <input type='text' placeholder=").concat(sp_scripts.newField.p_url, " name='sp-tracks[").concat(nextKey, "][url]' class=\"sp-track-url\" required/> <button class=\"sp-upload\" >Upload</button>  </div><div class='sp-input-music-upload-container'> <input type='url' placeholder=").concat(sp_scripts.newField.p_image, " name='sp-tracks[").concat(nextKey, "][pic]' class='sp-track-pic'  /> <button class=\"sp-upload-pic\" >Upload</button>  \n</div> <input type=\"button\" class=\"sp-remove-track secondary\" value=\"Remove Track\"></div></fieldset>");
+    var newFieldset = "<fieldset data-key='"
+      .concat(
+        nextKey,
+        '\'><div class="sp-toggle"> <h4></h4><span> &#9650;</span></div> <div class="sp-toggle-target"> <input type=\'text\' placeholder='
+      )
+      .concat(sp_scripts.newField.p_title, " name='sp-tracks[")
+      .concat(
+        nextKey,
+        "][title]' class=\"sp-track-title\" required/> <input type='text' placeholder="
+      )
+      .concat(sp_scripts.newField.p_artiste, " name='sp-tracks[")
+      .concat(
+        nextKey,
+        "][artiste]' class=\"sp-track-artiste\" required/> <div class='sp-input-music-upload-container'>  <input type='text' placeholder="
+      )
+      .concat(sp_scripts.newField.p_url, " name='sp-tracks[")
+      .concat(
+        nextKey,
+        "][url]' class=\"sp-track-url\" required/> <button class=\"sp-upload\" >Upload</button>  </div><div class='sp-input-music-upload-container'> <input type='url' placeholder="
+      )
+      .concat(sp_scripts.newField.p_image, " name='sp-tracks[")
+      .concat(
+        nextKey,
+        '][pic]\' class=\'sp-track-pic\'  /> <button class="sp-upload-pic" >Upload</button>  \n</div> <input type="button" class="sp-remove-track secondary" value="Remove Track"></div></fieldset>'
+      );
 
     if (lastFieldSet) {
       lastFieldSet.insertAdjacentHTML("afterend", newFieldset);
     } else {
       spFormContainer.innerHTML = newFieldset;
     } // Re-register necessary DOM elements
-
 
     spRegisterRemoveButtons();
     registerTogglers();
@@ -47,24 +70,29 @@ spaddTrackButtons.forEach(function (button) {
 function spRegisterRemoveButtons() {
   spremoveTrackButtons = document.querySelectorAll(".sp-remove-track");
   spremoveTrackButtons.forEach(function (button) {
-    button.addEventListener("click", function (e) {
-      e.preventDefault();
-      button.parentElement.parentElement.remove();
-    }, {
-      once: true
-    });
+    button.addEventListener(
+      "click",
+      function (e) {
+        e.preventDefault();
+        button.parentElement.parentElement.remove();
+      },
+      {
+        once: true,
+      }
+    );
   });
 }
 /**
  * assign listener to 'Title' fields
  */
 
-
 function registerTitles() {
   var titleInputs = document.querySelectorAll(".sp-track-title");
   titleInputs.forEach(function (title) {
     title.addEventListener("input", function (e) {
-      title.parentElement.parentElement.querySelector(".sp-toggle").querySelector("h4").innerHTML = e.target.value;
+      title.parentElement.parentElement
+        .querySelector(".sp-toggle")
+        .querySelector("h4").innerHTML = e.target.value;
     });
   });
 }
@@ -72,12 +100,13 @@ function registerTitles() {
  * assign listener to 'Remove Track' buttons
  */
 
-
 function registerTogglers() {
   var toggleBars = document.querySelectorAll(".sp-toggle");
   toggleBars.forEach(function (toggleBar) {
     var toggleBarText = toggleBar.querySelector("h4");
-    var titleText = toggleBar.parentElement.querySelector(".sp-toggle-target").querySelector(".sp-track-title");
+    var titleText = toggleBar.parentElement
+      .querySelector(".sp-toggle-target")
+      .querySelector(".sp-track-title");
     toggleBarText.innerHTML = titleText.value;
     toggleBar.addEventListener("click", function () {
       var target = toggleBar.parentElement.querySelector(".sp-toggle-target");
@@ -94,7 +123,6 @@ function registerTogglers() {
   });
   return toggleBars;
 } // assign listener to "Toggle ALl" button
-
 
 spTogglePlaylistButtons.forEach(function (button) {
   button.addEventListener("click", function (e) {
@@ -140,25 +168,38 @@ function registerUploadButtons() {
         spMediaUploader = wp.media({
           title: "Select a Song",
           library: {
-            type: "audio"
+            type: "audio",
           },
           button: {
-            text: "Select Song"
+            text: "Select Song",
           },
-          multiple: false
+          multiple: false,
         });
         spMediaUploader.on("select", function () {
-          attachment = spMediaUploader.state().get("selection").first().toJSON();
+          var attachment = spMediaUploader
+            .state()
+            .get("selection")
+            .first()
+            .toJSON();
           button.parent().children(".sp-track-url").val(attachment.url);
           var title = button.parent().parent().children(".sp-track-title");
           var artiste = button.parent().parent().children(".sp-track-artiste");
 
           if (attachment.title && title.val() === "") {
             title.val(attachment.title);
-            title.parent().parent().children(".sp-toggle").children("h4").html(attachment.title);
+            title
+              .parent()
+              .parent()
+              .children(".sp-toggle")
+              .children("h4")
+              .html(attachment.title);
           }
 
-          if (attachment.meta && attachment.meta.artist && artiste.val() === "") {
+          if (
+            attachment.meta &&
+            attachment.meta.artist &&
+            artiste.val() === ""
+          ) {
             artiste.val(attachment.meta.artist);
           }
         });
@@ -177,15 +218,19 @@ function registerUploadButtons() {
         spMediaUploader = wp.media({
           title: "Select a Cover Image",
           library: {
-            type: "image"
+            type: "image",
           },
           button: {
-            text: "Select Cover Image"
+            text: "Select Cover Image",
           },
-          multiple: false
+          multiple: false,
         });
         spMediaUploader.on("select", function () {
-          attachment = spMediaUploader.state().get("selection").first().toJSON();
+          attachment = spMediaUploader
+            .state()
+            .get("selection")
+            .first()
+            .toJSON();
           console.log(attachment.url);
           button.parent().children(".sp-track-pic").val(attachment.url);
         });
@@ -207,24 +252,27 @@ mColorInput.addEventListener("change", function () {
 
 tColorInput.addEventListener("change", function () {
   document.querySelectorAll(".cp-track").forEach(function (e) {
-    return e.style.background = tColorInput.value;
+    return (e.style.background = tColorInput.value);
   });
 }); // assign listener to 'Accent Color' input field
 
 aColorInput.addEventListener("change", function () {
-  document.querySelector(".cp-pause-duration").style.background = aColorInput.value;
-  document.querySelector(".cp-track.cp-selected").style.color = aColorInput.value;
+  document.querySelector(".cp-pause-duration").style.background =
+    aColorInput.value;
+  document.querySelector(".cp-track.cp-selected").style.color =
+    aColorInput.value;
   document.querySelector(".cp-pause-play svg").style.fill = aColorInput.value;
   document.querySelector("#cp-play-options svg").style.fill = aColorInput.value;
 }); // assign listener to 'Shadow Color' input field
 
 sColorInput.addEventListener("change", function () {
-  document.querySelector(".cp-pause-duration").style.boxShadow = "0px 0px 18px 0px " + sColorInput.value;
+  document.querySelector(".cp-pause-duration").style.boxShadow =
+    "0px 0px 18px 0px " + sColorInput.value;
 }); // assign listener to 'Primary Color' input field
 
 pColorInput.addEventListener("change", function () {
   document.querySelectorAll(".cp-end svg").forEach(function (e) {
-    return e.style.fill = pColorInput.value;
+    return (e.style.fill = pColorInput.value);
   });
   document.querySelector(".cp-container").style.color = pColorInput.value;
 });
