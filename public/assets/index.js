@@ -1,3 +1,5 @@
+/** @format */
+
 "use strict";
 
 var spaddTrackButtons = document.querySelectorAll(".sp-add-track");
@@ -14,7 +16,7 @@ var pColorInput = document.querySelector("#sp-settings-pcolor"); // add new Fiel
 spaddTrackButtons.forEach(function (button) {
   button.addEventListener("click", function (e) {
     e.preventDefault();
-    var lastFieldSet = spFormContainer.lastElementChild;
+    var lastFieldSet = spFormContainer?.lastElementChild;
     var lastKey;
     var nextKey;
 
@@ -245,7 +247,7 @@ registerTogglers();
 registerTitles();
 registerUploadButtons(); // assign listener to 'Main Color' input field
 
-mColorInput.addEventListener("change", function () {
+mColorInput?.addEventListener("change", function () {
   document.querySelector(".cp-container").style.background = mColorInput.value;
   document.querySelector("#cp-polygon").style.background = mColorInput.value;
 }); // assign listener to 'Track Color' input field

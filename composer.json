@@ -1,0 +1,17 @@
+{
+  "name": "chifarol/wpplaylist",
+  "description": "a music playlist plugin for wordpress",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "Chifarol\\WPPlaylist\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Ilodigwe Chinaza",
+      "email": "ilodigwechinaza@gmail.com"
+    }
+  ],
+  "require": {}
+}

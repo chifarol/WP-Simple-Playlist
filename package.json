@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "push": "git add . && git commit -m 'update' && git push origin",
     "test": "echo \"Error: no test specified\" && exit 1",
     "adminjs": "babel public/assets/index.js --out-file public/assets/index.js ",
     "frontjs": "babel public/music-player/index.js -d public/music-player/index.js "
